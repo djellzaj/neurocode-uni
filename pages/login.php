@@ -50,5 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <p>Admin: admin@neurocode.com / admin123</p>
 <p>User: user@neurocode.com / user123</p>
 
+<p>Nuk ke llogari? <a href="register.php">Regjistrohu këtu</a></p>
+
 </body>
 </html>
