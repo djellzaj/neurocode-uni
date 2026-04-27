@@ -78,3 +78,80 @@ nav a:hover {
 .login-btn:hover {
     background-color: #e6f0ff;
 }
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #0a0a4e;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin: 15px 0;
+}
+
+.main-content {
+    flex: 1;
+    padding: 30px;
+}
+
+.content-box,
+.stat-box {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-box {
+    flex: 1;
+    text-align: center;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.report-table th,
+.report-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.report-table th {
+    background-color: #007BFF;
+    color: white;
+}
+
+.project-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+textarea {
+    padding: 8px;
+    font-size: 14px;
+}
