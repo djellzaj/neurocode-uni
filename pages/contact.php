@@ -22,28 +22,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // NAME VALIDATION
     if (empty($name)) {
-        $nameError = "Name is required.";
+        $nameError = "Emri kerkohet.";
     } elseif (!preg_match("/^[a-zA-Z\s]+$/", $name)) {
-        $nameError = "Name must contain only letters.";
+        $nameError = "Emri duhet te permbaje vetem shkronja";
     }
 
     // EMAIL VALIDATION (REGEX)
     if (empty($email)) {
-        $emailError = "Email is required.";
+        $emailError = "Email-i kerkohet.";
     } elseif (!preg_match("/^[^@\s]+@[^@\s]+\.[^@\s]+$/", $email)) {
-        $emailError = "Invalid email format.";
+        $emailError = "Formati i email-it nuk eshte i sakte.";
     }
 
     // PHONE VALIDATION (REGEX)
     if (empty($phone)) {
-        $phoneError = "Phone is required.";
+        $phoneError = "Numri i telefonit kerkohet.";
     } elseif (!preg_match("/^[0-9]{9}$/", $phone)) {
-        $phoneError = "Phone must have 9 digits.";
+        $phoneError = "Telefoni duhet ti kete 9 shifra";
     }
 
     // MESSAGE VALIDATION
     if (empty($message)) {
-        $messageError = "Message is required.";
+        $messageError = "Mesazhi kerkohet";
     }
 
     // SUCCESS
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         setcookie("visitor_name", $name, time() + 3600, "/");
         setcookie("visitor_email", $email, time() + 3600, "/");
 
-        $successMessage = "Message sent successfully!";
+        $successMessage = "Mesazhi u dergua me sukses!";
     }
 }
 ?>
@@ -66,9 +66,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="user-name">
                 <?php
                 if (isset($_COOKIE["visitor_name"])) {
-                    echo "Welcome back, " . $_COOKIE["visitor_name"];
+                    echo "Miresevini, " . $_COOKIE["visitor_name"];
                 } else {
-                    echo "Contact Page";
+                    echo "Faqja e kontaktit";
                 }
                 ?>
             </p>
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <main class="main-content">
         <div class="content-box">
-            <h1>Contact Us</h1>
+            <h1>Na kontaktoni/</h1>
 
             <?php if (!empty($successMessage)) { ?>
                 <p style="color: green;"><?php echo $successMessage; ?></p>
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST" class="project-form">
 
                 <div class="project-group">
-                    <label>Full Name</label>
+                    <label>Emri</label>
                     <input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>">
                     <small style="color:red;"><?php echo $nameError; ?></small>
                 </div>
@@ -106,18 +106,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="project-group">
-                    <label>Phone</label>
+                    <label>Telefoni</label>
                     <input type="text" name="phone" value="<?php echo htmlspecialchars($phone); ?>">
                     <small style="color:red;"><?php echo $phoneError; ?></small>
                 </div>
 
                 <div class="project-group">
-                    <label>Message</label>
+                    <label>Mesazhi</label>
                     <textarea name="message"><?php echo htmlspecialchars($message); ?></textarea>
                     <small style="color:red;"><?php echo $messageError; ?></small>
                 </div>
 
-                <button type="submit" class="project-btn">Send Message</button>
+                <button type="submit" class="project-btn">Dergo mesazhin</button>
 
             </form>
         </div>
