@@ -98,6 +98,18 @@ include "../includes/project-data.php";
                     </tr>
                 <?php } ?>
             </table>
+            
+            <h2>Projektet e sortuara sipas titullit</h2>
+            
+            <ul>
+                <?php foreach ($projectArray as $project) { ?>
+                    <li>
+                        <?php echo $project["title"]; ?> -
+                        <?php echo $project["client"]; ?> -
+                        <?php echo $project["status"]; ?>
+                    </li>
+                <?php } ?>
+            </ul>
         </div>
 
     </main>
