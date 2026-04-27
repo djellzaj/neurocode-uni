@@ -13,6 +13,8 @@
 
 <h1>Regjistrohu në NeuroCode</h1>
 
+<p>Kjo faqe është vetëm demonstrim për Fazën I. Përdoruesit ruhen statikisht në kod.</p>
+    
 <form method="POST" action="">
     <label>Emri:</label>
     <input type="text" name="name" required>
