@@ -30,27 +30,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Kyçja - NeuroCode</title>
     <link rel="stylesheet" href="../assets/style.css"></head>
 <body>
+<div class="auth-page">
+    <div class="auth-box">
 
-<h1>Kyçu në NeuroCode</h1>
+        <a href="index.php" class="back-home">← Kthehu në Ballinë</a>
 
-<?php if ($error != ""): ?>
-    <p class="error"><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Kyçu në NeuroCode</h1>
 
-<form method="POST" action="">
-    <label>Email:</label>
-    <input type="email" name="email" required>
+        <?php if ($error != ""): ?>
+            <p class="error"><?php echo $error; ?></p>
+        <?php endif; ?>
 
-    <label>Fjalëkalimi:</label>
-    <input type="password" name="password" required>
+        <form method="POST" action="">
+            <label>Email:</label>
+            <input type="email" name="email" required>
 
-    <button type="submit">Kyçu</button>
-</form>
+            <label>Fjalëkalimi:</label>
+            <input type="password" name="password" required>
 
-<p>Admin: admin@neurocode.com / admin123</p>
-<p>User: user@neurocode.com / user123</p>
+            <button type="submit">Kyçu</button>
+        </form>
 
-<p>Nuk ke llogari? <a href="register.php">Regjistrohu këtu</a></p>
+        <p>Admin: admin@neurocode.com / admin123</p>
+        <p>User: user@neurocode.com / user123</p>
 
+        <p>Nuk ke llogari? <a href="register.php">Regjistrohu këtu</a></p>
+
+    </div>
+</div>
 </body>
 </html>
