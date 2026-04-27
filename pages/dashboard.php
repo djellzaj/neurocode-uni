@@ -14,23 +14,28 @@ include "../includes/project-data.php";
 
 <div class="dashboard-container">
 
-    <aside class="sidebar">
-        <div class="sidebar-top">
-            <h2>NeuroCode</h2>
-            <p class="user-name">
-                <?php echo $_SESSION["user_name"]; ?><br>
-                <?php echo $_SESSION["user_role"]; ?>
-            </p>
+<aside class="sidebar">
+    <div>
+        <h2>NeuroCode</h2>
+
+        <div class="user-name">
+            <?php echo $_SESSION["user_name"]; ?><br>
+            <small><?php echo $_SESSION["user_role"]; ?></small>
         </div>
 
         <nav class="sidebar-menu">
             <ul>
                 <li><a href="dashboard.php" class="active">Dashboard</a></li>
-                <li><a href="contact.php">Contact</a></li>
-                <li><a href="logout.php">Dil</a></li>
+                <li><a href="contact.php">Kontakt</a></li>
+                <li><a href="index.php">Ballina</a></li>
             </ul>
         </nav>
-    </aside>
+    </div>
+
+    <div class="sidebar-footer">
+        <a href="logout.php" class="logout-btn">Dil</a>
+    </div>
+</aside>
 
     <main class="main-content">
 
@@ -54,17 +59,17 @@ include "../includes/project-data.php";
         <div class="stats">
             <div class="stat-box">
                 <h3><?php echo countProjects($projects); ?></h3>
-                <p>Total Projects</p>
+                <p>Totali i Projekteve</p>
             </div>
 
             <div class="stat-box">
                 <h3><?php echo countCompleted($projects); ?></h3>
-                <p>Completed</p>
+                <p>Të përfunduara</p>
             </div>
 
             <div class="stat-box">
                 <h3><?php echo countInProgress($projects); ?></h3>
-                <p>In Progress</p>
+                <p>Në progres</p>
             </div>
         </div>
 
@@ -73,11 +78,11 @@ include "../includes/project-data.php";
 
             <table class="report-table">
                 <tr>
-                    <th>Title</th>
-                    <th>Client</th>
-                    <th>Deadline</th>
-                    <th>Status</th>
-                    <th>Priority</th>
+                    <th>Titulli</th>
+                    <th>Klienti</th>
+                    <th>Afati</th>
+                    <th>Statusi</th>
+                    <th>Prioriteti</th>
                 </tr>
 
                 <?php foreach ($projects as $p) { ?>
@@ -98,18 +103,6 @@ include "../includes/project-data.php";
                     </tr>
                 <?php } ?>
             </table>
-            
-            <h2>Projektet e sortuara sipas titullit</h2>
-            
-            <ul>
-                <?php foreach ($projectArray as $project) { ?>
-                    <li>
-                        <?php echo $project["title"]; ?> -
-                        <?php echo $project["client"]; ?> -
-                        <?php echo $project["status"]; ?>
-                    </li>
-                <?php } ?>
-            </ul>
         </div>
 
     </main>
