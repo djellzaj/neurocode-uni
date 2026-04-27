@@ -5,10 +5,16 @@ if (session_status() === PHP_SESSION_NONE) {
 ?>
 
 <nav>
-    <a href="../pages/index.php">Ballina</a>
-    <a href="../pages/login.php">Kyçu</a>
-    <a href="../pages/register.php">Regjistrohu</a>
-    <a href="../pages/contact.php">Kontakt</a>
+    <div class="nav-container">
+        <a href="index.php" class="logo">NeuroCode</a>
 
-     <a href="../pages/login.php" class="login-btn">Login</a>
+        <div class="nav-links">
+            <a href="index.php">Ballina</a>
+            <a href="login.php">Kyçu</a>
+            <a href="register.php">Regjistrohu</a>
+            <a href="contact.php">Kontakt</a>
+        </div>
+
+        <a href="login.php" class="login-btn">Kyçu</a>
+    </div>
 </nav>
