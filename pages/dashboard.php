@@ -1,6 +1,8 @@
 <?php
-include "../includes/auth.php";
-include "../includes/project-data.php";
+require_once "../includes/auth.php";
+require_once "../includes/project-data.php";
+
+/** @var array $projects */
 ?>
 
 <!DOCTYPE html>
