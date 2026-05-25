@@ -396,3 +396,143 @@ footer {
     background-color: dodgerblue;
     color: white;
 }
+
+.clients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.clients-header h2 {
+    margin: 0;
+}
+
+.clients-header a {
+    background-color: dodgerblue;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.clients-header a:hover {
+    background-color: #0a0a4e;
+}
+
+
+form {
+    margin-bottom: 15px;
+}
+
+form input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 260px;
+}
+
+form button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    background: dodgerblue;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background: #0a0a4e;
+}
+
+.clients-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.clients-table th,
+.clients-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.clients-table th {
+    background-color: #0a0a4e;
+    color: white;
+}
+
+.clients-table tr:hover {
+    background-color: #f1f5ff;
+}
+
+.action-btn {
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.edit-btn {
+    background-color: orange;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: darkorange;
+}
+
+.delete-btn {
+    background-color: crimson;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+.form-container {
+    max-width: 500px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.form-container label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+.form-container input {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.form-container button {
+    margin-top: 15px;
+    width: 100%;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: dodgerblue;
+    box-shadow: 0 0 5px rgba(30,144,255,0.3);
+}
+
+.empty-message {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
