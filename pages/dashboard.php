@@ -8,55 +8,73 @@ include "../includes/project-data.php";
 <head>
     <meta charset="UTF-8">
     <title>Dashboard - NeuroCode</title>
-<link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
 <div class="dashboard-container">
 
-<aside class="sidebar">
-    <div>
-        <h2>NeuroCode</h2>
+    <aside class="sidebar">
+        <div>
+            <h2>NeuroCode</h2>
 
-        <div class="user-name">
-            <?php echo $_SESSION["user_name"]; ?><br>
-            <small><?php echo $_SESSION["user_role"]; ?></small>
+            <div class="user-name">
+                <?php echo htmlspecialchars($_SESSION["user_name"]); ?><br>
+                <small><?php echo htmlspecialchars($_SESSION["user_role"]); ?></small>
+            </div>
+
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.php" class="active">Dashboard</a></li>
+                    <li><a href="clients.php">Klientët</a></li>
+                    <li><a href="projects.php">Projektet</a></li>
+                    <li><a href="contact.php">Kontakt</a></li>
+                    <li><a href="index.php">Ballina</a></li>
+                </ul>
+            </nav>
         </div>
 
-        <nav class="sidebar-menu">
-            <ul>
-                <li><a href="dashboard.php" class="active">Dashboard</a></li>
-                <li><a href="contact.php">Kontakt</a></li>
-                <li><a href="index.php">Ballina</a></li>
-            </ul>
-        </nav>
-    </div>
-
-    <div class="sidebar-footer">
-        <a href="logout.php" class="logout-btn">Dil</a>
-    </div>
-</aside>
+        <div class="sidebar-footer">
+            <a href="logout.php" class="logout-btn">Dil</a>
+        </div>
+    </aside>
 
     <main class="main-content">
 
         <div class="content-box">
-            <h1>Mirë se erdhe, <?php echo $_SESSION["user_name"]; ?>!</h1>
-            <p>Email: <?php echo $_SESSION["user_email"]; ?></p>
-            <p>Roli: <?php echo $_SESSION["user_role"]; ?></p>
+            <h1>Mirë se erdhe, <?php echo htmlspecialchars($_SESSION["user_name"]); ?>!</h1>
+
+            <p>Email: <?php echo htmlspecialchars($_SESSION["user_email"]); ?></p>
+
+            <p>Roli: <?php echo htmlspecialchars($_SESSION["user_role"]); ?></p>
         </div>
 
         <div class="content-box">
+
             <?php if ($_SESSION["user_role"] == "admin"): ?>
+
                 <h2>Paneli i Adminit</h2>
-                <p>Admini ka qasje në menaxhimin e përdoruesve, projekteve dhe raporteve.</p>
+
+                <p>
+                    Admini ka qasje në menaxhimin e përdoruesve,
+                    projekteve dhe raporteve.
+                </p>
+
             <?php else: ?>
+
                 <h2>Paneli i Përdoruesit</h2>
-                <p>Përdoruesi mund të shikojë projektet dhe informacionet bazë.</p>
+
+                <p>
+                    Përdoruesi mund të shikojë projektet dhe
+                    informacionet bazë.
+                </p>
+
             <?php endif; ?>
+
         </div>
 
-       
         <div class="stats">
+
             <div class="stat-box">
                 <h3><?php echo countProjects($projects); ?></h3>
                 <p>Totali i Projekteve</p>
@@ -71,12 +89,15 @@ include "../includes/project-data.php";
                 <h3><?php echo countInProgress($projects); ?></h3>
                 <p>Në progres</p>
             </div>
+
         </div>
 
         <div class="content-box">
+
             <h2>Lista e Projekteve</h2>
 
             <table class="report-table">
+
                 <tr>
                     <th>Titulli</th>
                     <th>Klienti</th>
@@ -86,26 +107,51 @@ include "../includes/project-data.php";
                 </tr>
 
                 <?php foreach ($projects as $p) { ?>
+
                     <tr>
-                        <td><?php echo $p->getTitle(); ?></td>
-                        <td><?php echo $p->getClient(); ?></td>
-                        <td><?php echo $p->getDeadline(); ?></td>
-                        <td><?php echo $p->getStatus(); ?></td>
+
                         <td>
+                            <?php echo htmlspecialchars($p->getTitle()); ?>
+                        </td>
+
+                        <td>
+                            <?php echo htmlspecialchars($p->getClient()); ?>
+                        </td>
+
+                        <td>
+                            <?php echo htmlspecialchars($p->getDeadline()); ?>
+                        </td>
+
+                        <td>
+                            <?php echo htmlspecialchars($p->getStatus()); ?>
+                        </td>
+
+                        <td>
+
                             <?php
                             if ($p instanceof PriorityProject) {
-                                echo $p->getPriority();
+
+                                echo htmlspecialchars($p->getPriority());
+
                             } else {
+
                                 echo "Normal";
+
                             }
                             ?>
+
                         </td>
+
                     </tr>
+
                 <?php } ?>
+
             </table>
+
         </div>
 
     </main>
+
 </div>
 
 </body>
