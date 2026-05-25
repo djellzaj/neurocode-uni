@@ -1,5 +1,6 @@
 <?php
 include "../includes/header.php";
+require_once "../config/db.php";
 
 $name = "";
 $email = "";
@@ -11,6 +12,7 @@ $emailError = "";
 $phoneError = "";
 $messageError = "";
 $successMessage = "";
+$errorMessage = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -42,12 +44,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($nameError) && empty($emailError) && empty($phoneError) && empty($messageError)) {
+          try {
+            $stmt = $conn->prepare("
+                INSERT INTO mesazhet (emri, email, mesazhi)
+                VALUES (?, ?, ?)
+            ");
+
+            $stmt->execute([$name, $email, $message]);
 
         setcookie("visitor_name", $name, time() + 3600, "/");
         setcookie("visitor_email", $email, time() + 3600, "/");
 
         $successMessage = "Mesazhi u dergua me sukses!";
-    }
+    } catch (Exception $e) {
+            $errorMessage = "Gabim gjate ruajtjes se mesazhit.";
+        }
+}
 }
 ?>
 
@@ -81,33 +93,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h1>Na kontaktoni</h1>
 
             <?php if (!empty($successMessage)) { ?>
-                <p style="color: green;"><?php echo $successMessage; ?></p>
+                <p style="color: green;"><?php echo htmlspecialchars($successMessage); ?></p>
             <?php } ?>
+            <?php if (!empty($errorMessage)) { ?>
+    <p style="color: red;"><?php echo htmlspecialchars($errorMessage); ?></p>
+<?php } ?>
 
             <form method="POST" class="project-form">
 
                 <div class="project-group">
                     <label>Emri dhe Mbiemri</label>
                     <input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>">
-                    <small style="color:red;"><?php echo $nameError; ?></small>
+                    <small style="color:red;"><?php echo htmlspecialchars($nameError); ?></small>
                 </div>
 
                 <div class="project-group">
                     <label>Email-i</label>
                     <input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>">
-                    <small style="color:red;"><?php echo $emailError; ?></small>
+                    <small style="color:red;"><?php echo htmlspecialchars($emailError); ?></small>
                 </div>
 
                 <div class="project-group">
                     <label>Telefoni</label>
                     <input type="text" name="phone" value="<?php echo htmlspecialchars($phone); ?>">
-                    <small style="color:red;"><?php echo $phoneError; ?></small>
+                    <small style="color:red;"><?php echo htmlspecialchars($phoneError); ?></small>
                 </div>
 
                 <div class="project-group">
                     <label>Mesazhi</label>
                     <textarea name="message"><?php echo htmlspecialchars($message); ?></textarea>
-                    <small style="color:red;"><?php echo $messageError; ?></small>
+                    <small style="color:red;"><?php echo htmlspecialchars($messageError); ?></small>
                 </div>
 
                 <button type="submit" class="project-btn">Dergo mesazhin</button>
