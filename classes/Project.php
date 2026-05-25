@@ -1,47 +1,87 @@
 <?php
 
 class Project {
-    private $title;
-    private $client;
-    private $deadline;
-    private $status;
+    private $pdo;
 
-    public function __construct($title, $client, $deadline, $status) {
-        $this->title = $title;
-        $this->client = $client;
-        $this->deadline = $deadline;
-        $this->status = $status;
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
     }
 
-    public function getTitle() {
-        return $this->title;
+    public function getAllProjects() {
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                projektet.*,
+                klientet.emri AS klienti_emri,
+                perdoruesit.emri AS krijuesi_emri
+            FROM projektet
+            LEFT JOIN klientet ON projektet.klienti_id = klientet.id
+            LEFT JOIN perdoruesit ON projektet.krijuar_nga = perdoruesit.id
+            ORDER BY projektet.id DESC
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getClient() {
-        return $this->client;
+    public function getProjectById($id) {
+        $stmt = $this->pdo->prepare("SELECT * FROM projektet WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getDeadline() {
-        return $this->deadline;
+    public function addProject($klienti_id, $titulli, $pershkrimi, $afati, $statusi, $prioriteti, $buxheti, $fajlli, $krijuar_nga) {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO projektet 
+            (klienti_id, titulli, pershkrimi, afati, statusi, prioriteti, buxheti, fajlli, krijuar_nga)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+
+        return $stmt->execute([
+            $klienti_id,
+            $titulli,
+            $pershkrimi,
+            $afati,
+            $statusi,
+            $prioriteti,
+            $buxheti,
+            $fajlli,
+            $krijuar_nga
+        ]);
     }
 
-    public function getStatus() {
-        return $this->status;
+    public function updateProject($id, $klienti_id, $titulli, $pershkrimi, $afati, $statusi, $prioriteti, $buxheti) {
+        $stmt = $this->pdo->prepare("
+            UPDATE projektet
+            SET 
+                klienti_id = ?,
+                titulli = ?,
+                pershkrimi = ?,
+                afati = ?,
+                statusi = ?,
+                prioriteti = ?,
+                buxheti = ?
+            WHERE id = ?
+        ");
+
+        return $stmt->execute([
+            $klienti_id,
+            $titulli,
+            $pershkrimi,
+            $afati,
+            $statusi,
+            $prioriteti,
+            $buxheti,
+            $id
+        ]);
     }
 
-    public function setTitle($title) {
-        $this->title = $title;
+    public function deleteProject($id) {
+        $stmt = $this->pdo->prepare("DELETE FROM projektet WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 
-    public function setClient($client) {
-        $this->client = $client;
-    }
-
-    public function setDeadline($deadline) {
-        $this->deadline = $deadline;
-    }
-
-    public function setStatus($status) {
-        $this->status = $status;
+    public function getClients() {
+        $stmt = $this->pdo->prepare("SELECT id, emri, kompania FROM klientet ORDER BY emri ASC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
