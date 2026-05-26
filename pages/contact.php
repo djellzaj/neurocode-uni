@@ -1,5 +1,4 @@
 <?php
-include "../includes/header.php";
 require_once "../config/db.php";
 
 $name = "";
@@ -22,46 +21,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = trim($_POST["message"]);
 
     if (empty($name)) {
-        $nameError = "Emri kerkohet.";
-    } elseif (!preg_match("/^[a-zA-Z\s]+$/", $name)) {
-        $nameError = "Emri duhet te permbaje vetem shkronja";
+        $nameError = "Emri kërkohet.";
+    } elseif (!preg_match("/^[a-zA-ZëËçÇ\s]{3,}$/", $name)) {
+        $nameError = "Emri duhet të përmbajë vetëm shkronja.";
     }
 
     if (empty($email)) {
-        $emailError = "Email-i kerkohet.";
-    } elseif (!preg_match("/^[^@\s]+@[^@\s]+\.[^@\s]+$/", $email)) {
-        $emailError = "Formati i email-it nuk eshte i sakte.";
+        $emailError = "Email-i kërkohet.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailError = "Formati i email-it nuk është i saktë.";
     }
 
     if (empty($phone)) {
-        $phoneError = "Numri i telefonit kerkohet.";
-    } elseif (!preg_match("/^[0-9]{9}$/", $phone)) {
-        $phoneError = "Telefoni duhet ti kete 9 shifra.";
+        $phoneError = "Numri i telefonit kërkohet.";
+    } elseif (!preg_match("/^[0-9]{8,15}$/", $phone)) {
+        $phoneError = "Telefoni duhet të ketë 8 deri në 15 shifra.";
     }
 
     if (empty($message)) {
-        $messageError = "Mesazhi kerkohet.";
+        $messageError = "Mesazhi kërkohet.";
     }
 
-    if (empty($nameError) && empty($emailError) && empty($phoneError) && empty($messageError)) {
-          try {
+    if (
+        empty($nameError) &&
+        empty($emailError) &&
+        empty($phoneError) &&
+        empty($messageError)
+    ) {
+        try {
             $stmt = $conn->prepare("
                 INSERT INTO mesazhet (emri, email, mesazhi)
                 VALUES (?, ?, ?)
             ");
 
-            $stmt->execute([$name, $email, $message]);
+            $mesazhiPlote = "Telefoni: " . $phone . "\n\n" . $message;
 
-        setcookie("visitor_name", $name, time() + 3600, "/");
-        setcookie("visitor_email", $email, time() + 3600, "/");
+            $stmt->execute([$name, $email, $mesazhiPlote]);
 
-        $successMessage = "Mesazhi u dergua me sukses!";
-    } catch (Exception $e) {
-            $errorMessage = "Gabim gjate ruajtjes se mesazhit.";
+            setcookie("visitor_name", $name, time() + 3600, "/");
+            setcookie("visitor_email", $email, time() + 3600, "/");
+
+            $to = "info@neurocode.com";
+            $subject = "Mesazh i ri nga forma e kontaktit";
+            $body = "Emri: $name\nEmail: $email\nTelefoni: $phone\n\nMesazhi:\n$message";
+            $headers = "From: " . $email;
+
+            @mail($to, $subject, $body, $headers);
+
+            $successMessage = "Mesazhi u dërgua me sukses.";
+
+            $name = "";
+            $email = "";
+            $phone = "";
+            $message = "";
+
+        } catch (Exception $e) {
+            $errorMessage = "Gabim gjatë ruajtjes së mesazhit.";
         }
-}
+    }
 }
 ?>
+
+<?php include "../includes/header.php"; ?>
 
 <div class="dashboard-container">
     <aside class="sidebar">
@@ -82,6 +103,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <ul>
                     <li><a href="index.php">Ballina</a></li>
                     <li><a href="dashboard.php">Dashboard</a></li>
+                    <li><a href="clients.php">Klientët</a></li>
+                    <li><a href="projects.php">Projektet</a></li>
                     <li><a href="contact.php" class="active">Kontakt</a></li>
                 </ul>
             </nav>
@@ -95,9 +118,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if (!empty($successMessage)) { ?>
                 <p style="color: green;"><?php echo htmlspecialchars($successMessage); ?></p>
             <?php } ?>
+
             <?php if (!empty($errorMessage)) { ?>
-    <p style="color: red;"><?php echo htmlspecialchars($errorMessage); ?></p>
-<?php } ?>
+                <p style="color: red;"><?php echo htmlspecialchars($errorMessage); ?></p>
+            <?php } ?>
 
             <form method="POST" class="project-form">
 
@@ -109,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="project-group">
                     <label>Email-i</label>
-                    <input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>">
+                    <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
                     <small style="color:red;"><?php echo htmlspecialchars($emailError); ?></small>
                 </div>
 
@@ -125,9 +149,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <small style="color:red;"><?php echo htmlspecialchars($messageError); ?></small>
                 </div>
 
-                <button type="submit" class="project-btn">Dergo mesazhin</button>
+                <button type="submit" class="project-btn">Dërgo mesazhin</button>
 
             </form>
         </div>
     </main>
 </div>
+
+<?php include "../includes/footer.php"; ?>
