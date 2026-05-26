@@ -3,12 +3,14 @@ include "../includes/auth.php";
 require_once "../config/db.php";
 require_once "../classes/Project.php";
 
-if (!isset($_GET["id"])) {
+$id = $_GET["id"] ?? null;
+
+if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
     header("Location: projects.php");
     exit();
 }
 
-$id = (int) $_GET["id"];
+$id = (int) $id;
 
 try {
     $projectObj = new Project($conn);
