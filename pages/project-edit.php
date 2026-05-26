@@ -6,12 +6,14 @@ require_once "../classes/Project.php";
 $projectObj = new Project($conn);
 $clients = $projectObj->getClients();
 
-if (!isset($_GET["id"])) {
+$id = $_GET["id"] ?? null;
+
+if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
     header("Location: projects.php");
     exit();
 }
 
-$id = (int) $_GET["id"];
+$id = (int) $id;
 $project = $projectObj->getProjectById($id);
 
 if (!$project) {
@@ -23,29 +25,46 @@ $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $klienti_id = (int) $_POST["klienti_id"];
-    $titulli = htmlspecialchars(trim($_POST["titulli"]));
-    $pershkrimi = htmlspecialchars(trim($_POST["pershkrimi"]));
+    $titulli = trim($_POST["titulli"]);
+    $pershkrimi = trim($_POST["pershkrimi"]);
     $afati = $_POST["afati"];
-    $statusi = htmlspecialchars(trim($_POST["statusi"]));
-    $prioriteti = htmlspecialchars(trim($_POST["prioriteti"]));
+    $statusi = trim($_POST["statusi"]);
+    $prioriteti = trim($_POST["prioriteti"]);
     $buxheti = (float) $_POST["buxheti"];
 
-    try {
-        $projectObj->updateProject(
-            $id,
-            $klienti_id,
-            $titulli,
-            $pershkrimi,
-            $afati,
-            $statusi,
-            $prioriteti,
-            $buxheti
-        );
+    $statuset = ["ne_pritje", "ne_proces", "perfunduar"];
+    $prioritetet = ["ulet", "mesem", "larte"];
 
-        header("Location: projects.php");
-        exit();
-    } catch (Exception $e) {
-        $error = "Përditësimi dështoi.";
+    if ($klienti_id <= 0) {
+        $error = "Ju lutem zgjidhni një klient.";
+    } elseif (empty($titulli)) {
+        $error = "Titulli nuk mund të jetë i zbrazët.";
+    } elseif (!in_array($statusi, $statuset)) {
+        $error = "Statusi nuk është valid.";
+    } elseif (!in_array($prioriteti, $prioritetet)) {
+        $error = "Prioriteti nuk është valid.";
+    } elseif ($buxheti < 0) {
+        $error = "Buxheti nuk mund të jetë negativ.";
+    }
+
+    if (empty($error)) {
+        try {
+            $projectObj->updateProject(
+                $id,
+                $klienti_id,
+                $titulli,
+                $pershkrimi,
+                $afati,
+                $statusi,
+                $prioriteti,
+                $buxheti
+            );
+
+            header("Location: projects.php");
+            exit();
+        } catch (Exception $e) {
+            $error = "Përditësimi dështoi.";
+        }
     }
 }
 ?>
@@ -54,8 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Projekt</title>
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <title>Ndrysho Projekt</title>
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
@@ -69,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav class="sidebar-menu">
             <ul>
                 <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="clients.php">Klientët</a></li>
                 <li><a href="projects.php">Projektet</a></li>
                 <li><a href="logout.php">Dil</a></li>
             </ul>
@@ -77,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <main class="main-content">
         <div class="content-box">
-            <h1>Edit Projekt</h1>
+            <h1>Ndrysho Projekt</h1>
 
             <p style="color:red;"><?php echo htmlspecialchars($error); ?></p>
 
@@ -86,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label>Klienti</label>
                     <select name="klienti_id" required>
                         <?php foreach ($clients as $client): ?>
-                            <option value="<?php echo $client["id"]; ?>"
+                            <option value="<?php echo htmlspecialchars($client["id"]); ?>"
                                 <?php if ($project["klienti_id"] == $client["id"]) echo "selected"; ?>>
                                 <?php echo htmlspecialchars($client["emri"] . " - " . $client["kompania"]); ?>
                             </option>
