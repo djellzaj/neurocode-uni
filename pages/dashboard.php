@@ -93,7 +93,7 @@ try {
             </div>
         </div>
 
-        <div class="content-box">
+        <div class="content-box latest-projects-box">
             <h2>Projektet e fundit</h2>
 
             <table class="report-table">
