@@ -1,0 +1,143 @@
+<?php
+include "../includes/auth.php";
+require_once "../config/db.php";
+require_once "../classes/Project.php";
+
+$projectObj = new Project($conn);
+$projects = $projectObj->getAllProjects($_SESSION["user_id"]);
+?>
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>Projektet - NeuroCode</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+    <?php include "../includes/sidebar.php"; ?>
+
+    <main class="main-content">
+
+        <div class="content-box">
+            <h1>Lista e Projekteve</h1>
+            <p>Projektet janë të lidhura me klientët dhe përdoruesit në databazë.</p>
+
+            <a href="project-add.php" class="project-btn">Shto Projekt</a>
+        </div>
+
+        <div class="content-box">
+
+            <table class="report-table">
+                <tr>
+                    <th>Titulli</th>
+                    <th>Klienti</th>
+                    <th>Përshkrimi</th>
+                    <th>Afati</th>
+                    <th>Statusi</th>
+                    <th>Prioriteti</th>
+                    <th>Buxheti</th>
+                    <th>Fajlli</th>
+                    <th>Krijuar nga</th>
+                    <th>Veprime</th>
+                </tr>
+
+                <?php foreach ($projects as $project): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($project["titulli"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["klienti_emri"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["pershkrimi"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["afati"]); ?></td>
+
+                        <td>
+                            <select class="status-select" data-id="<?php echo htmlspecialchars($project["id"]); ?>">
+                                <option value="ne_pritje" <?php if ($project["statusi"] == "ne_pritje") echo "selected"; ?>>
+                                    Në pritje
+                                </option>
+                                <option value="ne_proces" <?php if ($project["statusi"] == "ne_proces") echo "selected"; ?>>
+                                    Në proces
+                                </option>
+                                <option value="perfunduar" <?php if ($project["statusi"] == "perfunduar") echo "selected"; ?>>
+                                    Përfunduar
+                                </option>
+                            </select>
+                        </td>
+
+                        <td><?php echo htmlspecialchars($project["prioriteti"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["buxheti"]); ?> €</td>
+
+                        <td>
+                            <?php if (!empty($project["fajlli"])): ?>
+                                <a 
+                                    class="action-btn open-btn"
+                                    href="../<?php echo htmlspecialchars($project["fajlli"]); ?>" 
+                                    target="_blank"
+                                >
+                                    Hape
+                                </a>
+                            <?php else: ?>
+                                Pa fajll
+                            <?php endif; ?>
+                        </td>
+
+                        <td><?php echo htmlspecialchars($project["krijuesi_emri"] ?? "N/A"); ?></td>
+
+                        <td>
+                            <a 
+                                class="action-btn edit-btn"
+                                href="project-edit.php?id=<?php echo htmlspecialchars($project["id"]); ?>"
+                            >
+                                Ndrysho
+                            </a>
+
+                            <a 
+                                class="action-btn delete-btn"
+                                href="project-delete.php?id=<?php echo htmlspecialchars($project["id"]); ?>"
+                                onclick="return confirm('A je i sigurt që do ta fshish këtë projekt?');"
+                            >
+                                Fshij
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+
+        </div>
+
+    </main>
+</div>
+
+<script>
+document.querySelectorAll(".status-select").forEach(function(select) {
+    select.addEventListener("change", function() {
+        const projectId = this.dataset.id;
+        const statusi = this.value;
+
+        fetch("../ajax/update_project_status.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body:
+                "id=" + encodeURIComponent(projectId) +
+                "&statusi=" + encodeURIComponent(statusi)
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data);
+        })
+        .catch(() => {
+            alert("Ndodhi një gabim gjatë përditësimit të statusit.");
+        });
+    });
+});
+</script>
+
+</body>
+</html>

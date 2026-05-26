@@ -27,3 +27,35 @@ NeuroCode është një aplikacion web i thjeshtë që simulon menaxhimin e të d
 - PHP
 - HTML
 - CSS
+
+
+## Faza II (PHP + MySQL + AJAX)
+
+Në Fazën II, projekti është zgjeruar duke integruar databazën MySQL dhe funksionalitete më të avancuara të PHP-së për menaxhimin real të të dhënave.
+
+### Funksionalitetet e Shtuara
+
+* Integrimi me databazë MySQL
+* CRUD për menaxhimin e klientëve dhe projekteve
+* Prepared Statements për mbrojtje nga SQL Injection
+* Sanitizim i inputeve dhe outputeve kundër XSS
+* Hashimi dhe verifikimi i fjalëkalimeve
+* AJAX për operacione pa refresh të faqes
+* Manipulim dhe upload i fajllave
+* Error handling me try/catch
+* Integrimi i Web API të jashtme
+* Dërgimi i email-eve përmes formës së kontaktit
+
+### Struktura e Re e Projektit
+
+/config – konfigurimi i databazës
+/database – SQL dump dhe struktura e databazës
+/ajax – funksionalitete AJAX
+/uploads – fajllat e ngarkuar nga përdoruesit
+
+### Teknologjitë e Shtuara
+
+* MySQL
+* JavaScript
+* AJAX
+
