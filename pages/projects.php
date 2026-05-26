@@ -17,29 +17,7 @@ $projects = $projectObj->getAllProjects();
 <body>
 
 <div class="dashboard-container">
-
-    <aside class="sidebar">
-
-        <div class="sidebar-top">
-            <h2>NeuroCode</h2>
-
-            <p class="user-name">
-                <?php echo htmlspecialchars($_SESSION["user_name"]); ?><br>
-                <?php echo htmlspecialchars($_SESSION["user_role"]); ?>
-            </p>
-        </div>
-
-        <nav class="sidebar-menu">
-            <ul>
-                <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="clients.php">Klientët</a></li>
-                <li><a href="projects.php" class="active">Projektet</a></li>
-                <li><a href="project-add.php">Shto Projekt</a></li>
-                <li><a href="logout.php">Dil</a></li>
-            </ul>
-        </nav>
-
-    </aside>
+<?php include "../includes/sidebar.php"; ?>
 
     <main class="main-content">
 
