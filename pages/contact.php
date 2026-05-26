@@ -85,31 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php include "../includes/header.php"; ?>
 
 <div class="dashboard-container">
-    <aside class="sidebar">
-        <div>
-            <h2>NeuroCode</h2>
-
-            <div class="user-name">
-                <?php
-                if (isset($_COOKIE["visitor_name"])) {
-                    echo "Mirë se u ktheve, " . htmlspecialchars($_COOKIE["visitor_name"]);
-                } else {
-                    echo "Faqja e kontaktit";
-                }
-                ?>
-            </div>
-
-            <nav class="sidebar-menu">
-                <ul>
-                    <li><a href="index.php">Ballina</a></li>
-                    <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="clients.php">Klientët</a></li>
-                    <li><a href="projects.php">Projektet</a></li>
-                    <li><a href="contact.php" class="active">Kontakt</a></li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
+<?php include "../includes/sidebar.php"; ?>
 
     <main class="main-content">
         <div class="content-box">
