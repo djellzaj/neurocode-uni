@@ -1,11 +1,6 @@
 <?php
 require_once "../config/db.php";
-session_start();
-
-if (!isset($_SESSION["user_email"])) {
-    header("Location: login.php");
-    exit;
-}
+require_once "../includes/auth.php";
 
 if ($_SESSION["user_role"] != "admin") {
     die("Qasje e ndaluar");
@@ -36,7 +31,7 @@ if ($search != "") {
 
     <div class="clients-header">
         <h2>Klientët</h2>
-        <a href="clients-add.php">+ Shto Klient</a>
+        <a href="client-add.php">+ Shto Klient</a>
     </div>
 
     <!-- 🔍 SEARCH FILTER -->
@@ -67,8 +62,8 @@ if ($search != "") {
                     <td><?= htmlspecialchars($k["telefoni"]) ?></td>
                     <td><?= htmlspecialchars($k["kompania"]) ?></td>
                     <td>
-                        <a class="action-btn edit-btn" href="clients-edit.php?id=<?= $k["id"] ?>">Ndrysho</a>
-                        <a class="action-btn delete-btn" href="clients-delete.php?id=<?= $k["id"] ?>" onclick="return confirm('A jeni i sigurt?')">Fshij</a>
+                        <a class="action-btn edit-btn" href="client-edit.php?id=<?= htmlspecialchars($k["id"]) ?>">Ndrysho</a>
+                        <a class="action-btn delete-btn" href="client-delete.php?id=<?= htmlspecialchars($k["id"]) ?>" onclick="return confirm('A jeni i sigurt?')">Fshij</a>
                     </td>
                 </tr>
             <?php } ?>
