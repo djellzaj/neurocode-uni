@@ -1,6 +1,11 @@
 <?php
 require_once "../includes/auth.php";
 require_once "../config/db.php";
+require_once "../classes/Project.php";
+
+$projectObj = new Project($conn);
+$projects = $projectObj->getAllProjects($_SESSION["user_id"]);
+
 
 $totalProjects = 0;
 $completedProjects = 0;
@@ -8,21 +13,25 @@ $inProgressProjects = 0;
 $totalClients = 0;
 
 try {
-    $stmt = $conn->query("SELECT COUNT(*) FROM projektet");
+    $userId = $_SESSION["user_id"];
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM projektet WHERE krijuar_nga = ?");
+    $stmt->execute([$userId]);
     $totalProjects = $stmt->fetchColumn();
 
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM projektet WHERE statusi = ?");
-    $stmt->execute(["perfunduar"]);
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM projektet WHERE statusi = ? AND krijuar_nga = ?");
+    $stmt->execute(["perfunduar", $userId]);
     $completedProjects = $stmt->fetchColumn();
 
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM projektet WHERE statusi = ?");
-    $stmt->execute(["ne_proces"]);
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM projektet WHERE statusi = ? AND krijuar_nga = ?");
+    $stmt->execute(["ne_proces", $userId]);
     $inProgressProjects = $stmt->fetchColumn();
 
-    $stmt = $conn->query("SELECT COUNT(*) FROM klientet");
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM klientet WHERE krijuar_nga = ?");
+    $stmt->execute([$userId]);
     $totalClients = $stmt->fetchColumn();
 
-    $stmt = $conn->query("
+    $stmt = $conn->prepare("
         SELECT 
             projektet.titulli,
             klientet.emri AS klienti_emri,
@@ -31,9 +40,11 @@ try {
             projektet.prioriteti
         FROM projektet
         LEFT JOIN klientet ON projektet.klienti_id = klientet.id
+        WHERE projektet.krijuar_nga = ?
         ORDER BY projektet.id DESC
         LIMIT 5
     ");
+    $stmt->execute([$userId]);
     $latestProjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
