@@ -12,7 +12,7 @@ $projects = $projectObj->getAllProjects();
 <head>
     <meta charset="UTF-8">
     <title>Projektet - NeuroCode</title>
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
@@ -29,6 +29,7 @@ $projects = $projectObj->getAllProjects();
         <nav class="sidebar-menu">
             <ul>
                 <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="clients.php">Klientët</a></li>
                 <li><a href="projects.php" class="active">Projektet</a></li>
                 <li><a href="project-add.php">Shto Projekt</a></li>
                 <li><a href="logout.php">Dil</a></li>
@@ -76,10 +77,10 @@ $projects = $projectObj->getAllProjects();
                         </td>
                         <td><?php echo htmlspecialchars($project["krijuesi_emri"] ?? "N/A"); ?></td>
                         <td>
-                            <a class="edit-btn" href="project-edit.php?id=<?php echo $project["id"]; ?>">Edit</a>
-                            <a class="delete-btn" href="project-delete.php?id=<?php echo $project["id"]; ?>"
-                               onclick="return confirm('A je i sigurt që do ta fshish këtë projekt?');">
-                               Delete
+                            <a class="edit-btn" href="project-edit.php?id=<?php echo htmlspecialchars($project["id"]); ?>">Ndrysho</a>
+                            <a class="delete-btn" href="project-delete.php?id=<?php echo htmlspecialchars($project["id"]); ?>"
+                            onclick="return confirm('A je i sigurt që do ta fshish këtë projekt?');">
+                            Fshij
                             </a>
                         </td>
                     </tr>
