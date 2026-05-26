@@ -1,13 +1,12 @@
 <?php
 require_once "../config/db.php";
-session_start();
-
-if (!isset($_SESSION["user_email"])) {
-    header("Location: login.php");
-    exit;
-}
+require_once "../includes/auth.php";
 
 $id = $_GET["id"] ?? null;
+
+if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
+    die("ID nuk është valide");
+}
 
 if (!$id) {
     die("ID nuk është valide");
@@ -54,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form-container">
 
-        <?php if ($error != "") echo "<p class='error'>$error</p>"; ?>
+        <?php if ($error != "") echo "<p class='error'>" . htmlspecialchars($error) . "</p>"; ?>
 
         <form method="POST">
 
