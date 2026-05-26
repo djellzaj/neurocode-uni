@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emri = trim($_POST["name"]);
     $email = trim($_POST["email"]);
     $fjalekalimi = trim($_POST["password"]);
+    $roli = $_POST["role"] ?? "perdorues";
 
     if (empty($emri) || empty($email) || empty($fjalekalimi)) {
         $error = "Ju lutem plotësoni të gjitha fushat.";
@@ -15,6 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Email-i nuk është valid.";
     } elseif (strlen($fjalekalimi) < 6) {
         $error = "Fjalëkalimi duhet të ketë të paktën 6 karaktere.";
+    } elseif (!in_array($roli, ["admin", "perdorues"])) {
+        $error = "Roli nuk është valid.";
     } else {
         try {
             $kontrollo = $conn->prepare("SELECT id FROM perdoruesit WHERE email = ?");
@@ -26,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $fjalekalimiHash = password_hash($fjalekalimi, PASSWORD_DEFAULT);
 
                 $query = $conn->prepare(
-                    "INSERT INTO perdoruesit (emri, email, fjalekalimi) VALUES (?, ?, ?)"
+                    "INSERT INTO perdoruesit (emri, email, fjalekalimi, roli) VALUES (?, ?, ?, ?)"
                 );
 
-                $query->execute([$emri, $email, $fjalekalimiHash]);
+                $query->execute([$emri, $email, $fjalekalimiHash, $roli]);
 
                 $suksesi = "Regjistrimi u krye me sukses. Tani mund të kyçeni.";
             }
@@ -72,6 +75,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label>Fjalëkalimi:</label>
             <input type="password" name="password" required>
+
+            <label>Roli:</label>
+            <select name="role" required>
+                <option value="perdorues">Përdorues</option>
+                <option value="admin">Admin</option>
+            </select>
 
             <button type="submit">Regjistrohu</button>
         </form>
