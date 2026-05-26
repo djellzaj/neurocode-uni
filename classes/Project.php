@@ -7,7 +7,7 @@ class Project {
         $this->pdo = $pdo;
     }
 
-    public function getAllProjects() {
+    public function getAllProjects($userId) {
         $stmt = $this->pdo->prepare("
             SELECT 
                 projektet.*,
@@ -16,9 +16,10 @@ class Project {
             FROM projektet
             LEFT JOIN klientet ON projektet.klienti_id = klientet.id
             LEFT JOIN perdoruesit ON projektet.krijuar_nga = perdoruesit.id
+            WHERE projektet.krijuar_nga = ?
             ORDER BY projektet.id DESC
         ");
-        $stmt->execute();
+        $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
