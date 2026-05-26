@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$dbname = "neurocode_db";
+$dbname = "neurocode";
 $username = "root";
 $password = "";
 
