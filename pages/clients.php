@@ -11,21 +11,29 @@ $search = trim($_GET["search"] ?? "");
 
 if ($search != "") {
     $stmt = $conn->prepare("
-        SELECT * FROM klientet 
-        WHERE emri LIKE ? 
+    SELECT * FROM klientet 
+    WHERE krijuar_nga = ?
+    AND (
+        emri LIKE ? 
         OR email LIKE ? 
         OR kompania LIKE ?
-        ORDER BY id DESC
-    ");
-    $stmt->execute(["%$search%", "%$search%", "%$search%"]);
+    )
+    ORDER BY id DESC
+");
+    $stmt->execute([$_SESSION["user_id"], "%$search%", "%$search%", "%$search%"]);
     $klientet = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    $stmt = $conn->query("SELECT * FROM klientet ORDER BY id DESC");
+    $stmt = $conn->prepare("SELECT * FROM klientet WHERE krijuar_nga = ? ORDER BY id DESC");
+    $stmt->execute([$_SESSION["user_id"]]);
     $klientet = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
 
-<?php include("../includes/header.php"); ?>
+<?php 
+    include("../includes/header.php");
+    include "../includes/sidebar.php"; 
+?>
+
 
 <div class="main-content">
 
