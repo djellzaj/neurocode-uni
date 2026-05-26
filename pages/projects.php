@@ -17,28 +17,20 @@ $projects = $projectObj->getAllProjects();
 <body>
 
 <div class="dashboard-container">
-<?php include "../includes/sidebar.php"; ?>
+    <?php include "../includes/sidebar.php"; ?>
 
     <main class="main-content">
 
         <div class="content-box">
-
             <h1>Lista e Projekteve</h1>
+            <p>Projektet janë të lidhura me klientët dhe përdoruesit në databazë.</p>
 
-            <p>
-                Projektet janë të lidhura me klientët dhe përdoruesit në databazë.
-            </p>
-
-            <a href="project-add.php" class="project-btn">
-                Shto Projekt
-            </a>
-
+            <a href="project-add.php" class="project-btn">Shto Projekt</a>
         </div>
 
         <div class="content-box">
 
             <table class="report-table">
-
                 <tr>
                     <th>Titulli</th>
                     <th>Klienti</th>
@@ -53,140 +45,97 @@ $projects = $projectObj->getAllProjects();
                 </tr>
 
                 <?php foreach ($projects as $project): ?>
-
                     <tr>
+                        <td><?php echo htmlspecialchars($project["titulli"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["klienti_emri"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["pershkrimi"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["afati"]); ?></td>
 
                         <td>
-                            <?php echo htmlspecialchars($project["titulli"]); ?>
-                        </td>
-
-                        <td>
-                            <?php echo htmlspecialchars($project["klienti_emri"]); ?>
-                        </td>
-
-                        <td>
-                            <?php echo htmlspecialchars($project["pershkrimi"]); ?>
-                        </td>
-
-                        <td>
-                            <?php echo htmlspecialchars($project["afati"]); ?>
-                        </td>
-
-                        <td>
-                            <select 
-                                class="status-select"
-                                data-id="<?php echo htmlspecialchars($project["id"]); ?>"
-                            >
-                                <option value="ne_pritje"
-                                    <?php if ($project["statusi"] == "ne_pritje") echo "selected"; ?>>
+                            <select class="status-select" data-id="<?php echo htmlspecialchars($project["id"]); ?>">
+                                <option value="ne_pritje" <?php if ($project["statusi"] == "ne_pritje") echo "selected"; ?>>
                                     Në pritje
                                 </option>
-
-                                <option value="ne_proces"
-                                    <?php if ($project["statusi"] == "ne_proces") echo "selected"; ?>>
+                                <option value="ne_proces" <?php if ($project["statusi"] == "ne_proces") echo "selected"; ?>>
                                     Në proces
                                 </option>
-
-                                <option value="perfunduar"
-                                    <?php if ($project["statusi"] == "perfunduar") echo "selected"; ?>>
+                                <option value="perfunduar" <?php if ($project["statusi"] == "perfunduar") echo "selected"; ?>>
                                     Përfunduar
                                 </option>
                             </select>
                         </td>
 
-                        <td>
-                            <?php echo htmlspecialchars($project["prioriteti"]); ?>
-                        </td>
+                        <td><?php echo htmlspecialchars($project["prioriteti"]); ?></td>
+
+                        <td><?php echo htmlspecialchars($project["buxheti"]); ?> €</td>
 
                         <td>
-                            <?php echo htmlspecialchars($project["buxheti"]); ?> €
-                        </td>
-
-                        <td>
-
                             <?php if (!empty($project["fajlli"])): ?>
-
-                                <a href="../<?php echo htmlspecialchars($project["fajlli"]); ?>" target="_blank">
+                                <a 
+                                    class="action-btn open-btn"
+                                    href="../<?php echo htmlspecialchars($project["fajlli"]); ?>" 
+                                    target="_blank"
+                                >
                                     Hape
                                 </a>
-
                             <?php else: ?>
-
                                 Pa fajll
-
                             <?php endif; ?>
-
                         </td>
 
-                        <td>
-                            <?php echo htmlspecialchars($project["krijuesi_emri"] ?? "N/A"); ?>
-                        </td>
+                        <td><?php echo htmlspecialchars($project["krijuesi_emri"] ?? "N/A"); ?></td>
 
                         <td>
-
                             <a 
-                                class="edit-btn"
+                                class="action-btn edit-btn"
                                 href="project-edit.php?id=<?php echo htmlspecialchars($project["id"]); ?>"
                             >
                                 Ndrysho
                             </a>
 
                             <a 
-                                class="delete-btn"
+                                class="action-btn delete-btn"
                                 href="project-delete.php?id=<?php echo htmlspecialchars($project["id"]); ?>"
                                 onclick="return confirm('A je i sigurt që do ta fshish këtë projekt?');"
                             >
                                 Fshij
                             </a>
-
                         </td>
-
                     </tr>
-
                 <?php endforeach; ?>
-
             </table>
 
         </div>
 
     </main>
-
 </div>
 
 <script>
 document.querySelectorAll(".status-select").forEach(function(select) {
-
     select.addEventListener("change", function() {
-
         const projectId = this.dataset.id;
         const statusi = this.value;
 
         fetch("../ajax/update_project_status.php", {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-
             body:
                 "id=" + encodeURIComponent(projectId) +
                 "&statusi=" + encodeURIComponent(statusi)
-
         })
-
         .then(response => response.text())
-
         .then(data => {
             alert(data);
         })
-
         .catch(() => {
             alert("Ndodhi një gabim gjatë përditësimit të statusit.");
         });
-
     });
-
 });
 </script>
 
