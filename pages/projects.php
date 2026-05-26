@@ -4,7 +4,7 @@ require_once "../config/db.php";
 require_once "../classes/Project.php";
 
 $projectObj = new Project($conn);
-$projects = $projectObj->getAllProjects();
+$projects = $projectObj->getAllProjects($_SESSION["user_id"]);
 ?>
 
 <!DOCTYPE html>
