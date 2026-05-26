@@ -3,7 +3,37 @@ require_once "../config/db.php";
 require_once "../includes/auth.php";
 
 if ($_SESSION["user_role"] != "admin") {
-    die("Qasje e ndaluar");
+?>
+
+<?php 
+    include("../includes/header.php");
+    include "../includes/sidebar.php"; 
+?>
+
+<div class="main-content">
+
+    <div class="content-box denied-box">
+        <h1>⛔ Qasje e Ndaluar</h1>
+
+        <p>
+            Vetëm administratorët kanë qasje në faqen e klientëve.
+        </p>
+
+        <p class="denied-text">
+            Ky përdorues nuk ka leje për të menaxhuar klientët.
+        </p>
+
+        <a href="dashboard.php" class="dashboard-btn">
+            ⬅ Kthehu te Dashboard
+        </a>
+    </div>
+
+</div>
+
+<?php include("../includes/footer.php"); ?>
+
+<?php
+exit;
 }
 
 // SEARCH / FILTER
